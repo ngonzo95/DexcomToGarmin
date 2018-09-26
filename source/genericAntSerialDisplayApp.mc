@@ -4,7 +4,7 @@ using Toybox.Timer;
 
 class genericAntSerialDisplayApp extends Application.AppBase {
 	hidden var cgm;
-	hidden var counter = 0;
+	hidden var counter = 200;
 	
     function initialize() {
         AppBase.initialize();
@@ -12,21 +12,19 @@ class genericAntSerialDisplayApp extends Application.AppBase {
 
     // onStart() is called on application start up
     function onStart(state) {
-    	cgm = new CGMController();
     	System.println("Starting APP");
-    	//Setup the ant channel to recieve messages
-		cgm.setupChannel();
-    	var openResult = cgm.channel.open();
-    	System.println("Open result: " + openResult);
-    	System.println("Startup completed");
-    	
-//    	var myTimer = new Timer.Timer();
-//    	myTimer.start(method(:timerCallback), 1000, true);
+    	cgm = new CGMController();
+    	cgm.open();
+
+    	var myTimer = new Timer.Timer();
+    	myTimer.start(method(:timerCallback), 1000, true);
     }
 
     // onStop() is called when your application is exiting
     function onStop(state) {
     	System.println("Closing APP");
+    	cgm.closeSensor();
+    	cgm.release();
     }
 
     // Return the initial view of your application here
@@ -37,7 +35,8 @@ class genericAntSerialDisplayApp extends Application.AppBase {
     
     function createFakeMessage(val){
     	var message = new Ant.Message();
-    	message.setPayload([val,val+1,val+2,val+3,val+4,val+5,val+6,val+7]);
+    	message.setPayload([1,1,1,1,(counter/5),(counter/5)%5,(counter & 0xff00) >> 8, counter & 0xff]);
+    	message.messageId = 78;
     	cgm.messageCallBack(message);
     }
     

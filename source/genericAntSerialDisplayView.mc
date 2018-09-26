@@ -23,38 +23,43 @@ class genericAntSerialDisplayView extends WatchUi.View {
     function onUpdate(dc) {
         // Call the parent onUpdate function to redraw the layout
         View.onUpdate(dc);
+        displayBloodSugar(dc);
+        displayRate(dc);
+        displayTime(dc);
+    }
+    
+    function displayBloodSugar(dc){
+    	dc.drawText(
+        	10, 5, Graphics.FONT_LARGE, "CGM Reading",  
+        	Graphics.TEXT_JUSTIFY_LEFT
+        );
+    	dc.drawText(
+        	dc.getWidth() / 2, (dc.getHeight() / 5) - 10, Graphics.FONT_NUMBER_HOT,
+        	cgm.bloodSugar,Graphics.TEXT_JUSTIFY_CENTER
+         );
+    }
+    
+    function displayRate(dc){
+    	dc.drawText(
+        	10, 2*dc.getHeight() / 5, Graphics.FONT_LARGE, "CGM Rate",  
+        	Graphics.TEXT_JUSTIFY_LEFT
+        );
         dc.drawText(
-        	dc.getWidth() / 2,                      // gets the width of the device and divides by 2
-        	dc.getHeight() / 4,                     // gets the height of the device and divides by 2
-        	Graphics.FONT_NUMBER_HOT,                    // sets the font size
-        	cgm.bloodSugar,                          // the String to display
-        	Graphics.TEXT_JUSTIFY_CENTER            // sets the justification for the text
-         );
-         var lineOne = cgm.payload.slice(0, 4);
-         var lineTwo = cgm.payload.slice(4, 8);
-         dc.drawText(
-        	dc.getWidth() / 2,                      // gets the width of the device and divides by 2
-        	dc.getHeight() / 2,                     // gets the height of the device and divides by 2
-        	Graphics.FONT_XTINY,                    // sets the font size
-        	lineOne,                          // the String to display
-        	Graphics.TEXT_JUSTIFY_CENTER            // sets the justification for the text
-         );
-         
-         dc.drawText(
-        	dc.getWidth() / 2,                      // gets the width of the device and divides by 2
-        	3*dc.getHeight() / 5,                     // gets the height of the device and divides by 2
-        	Graphics.FONT_XTINY,                    // sets the font size
-        	lineTwo,                          // the String to display
-        	Graphics.TEXT_JUSTIFY_CENTER            // sets the justification for the text
-         );
-         
-         dc.drawText(
-        	dc.getWidth() / 2,                      // gets the width of the device and divides by 2
-        	4*dc.getHeight() / 5,                     // gets the height of the device and divides by 2
-        	Graphics.FONT_XTINY,                    // sets the font size
-        	cgm.msgId,                          // the String to display
-        	Graphics.TEXT_JUSTIFY_CENTER            // sets the justification for the text
-         );
+        	dc.getWidth() / 2, (2*dc.getHeight() / 5) + 25, Graphics.FONT_LARGE, cgm.rate,  
+        	Graphics.TEXT_JUSTIFY_CENTER
+        );
+    }
+    
+    function displayTime(dc){
+    	dc.drawText(
+        	10, 3*dc.getHeight() / 4, Graphics.FONT_LARGE, "Last Reading",  
+        	Graphics.TEXT_JUSTIFY_LEFT
+        );
+        dc.drawText(
+        	dc.getWidth() / 2, (3*dc.getHeight() / 4) + 25, Graphics.FONT_LARGE, cgm.timeSinceLastReading,  
+        	Graphics.TEXT_JUSTIFY_CENTER
+        );
+    
     }
 
     // Called when this View is removed from the screen. Save the
